@@ -1,6 +1,6 @@
 var app = angular.module("Theremin",[]);
 
-app.controller("MainCtr",["$scope",function($scope){
+app.controller("MainCtr",["$scope","melody",function($scope,melody){
     //値によってdisplays
     $scope.isHighShow = false;
     $scope.isHigherShow = false;
@@ -12,7 +12,8 @@ app.controller("MainCtr",["$scope",function($scope){
         $scope.isLowShow = false;
         $scope.isLowerShow = false;
     }
-    $scope.$watch("waveLevel",function(newVal,oldVal){
+    $scope.level = melody.melodyLevel;
+    $scope.$watch("level",function(newVal,oldVal){
         allFalse();
         console.log(newVal);
         var _newVal = +newVal;
@@ -33,7 +34,137 @@ app.controller("MainCtr",["$scope",function($scope){
             default:
 
         }
-    });
-app.controller("MainCtr",[function(){
-
+    })
 }]);
+app.service("melody",["$rootScope","$window",function($rootScope,$window){
+    var self =this;
+    this.melodyLevel = '';
+    const PITCH = [
+ 220 * Math.pow( 1.06, 3 ), // ド
+ 220 * Math.pow( 1.06, 4 ), // ド#
+ 220 * Math.pow( 1.06, 5 ), // レ
+ 220 * Math.pow( 1.06, 6 ), // レ#
+ 220 * Math.pow( 1.06, 7 ), // ミ
+ 220 * Math.pow( 1.06, 8 ), // ファ
+ 220 * Math.pow( 1.06, 9 ), // ファ#
+ 220 * Math.pow( 1.06,10 ), // ソ
+ 220 * Math.pow( 1.06,11 ), // ソ#
+ 440, // ラ
+ 440 * Math.pow( 1.06, 1 ), // ラ#
+ 440 * Math.pow( 1.06, 2 ) // シ
+];
+const DEFAULT_PITCH = PITCH[0];
+
+var indicator;
+var audioContext;
+var oscillator;
+
+var displayBrightness = function(element, value){ //luxを<h1>に表示
+ element.textContent = value;
+};
+
+var changePitch = function(value){ //ピッチへ変換した値をoscillatorに渡す
+ oscillator.frequency.value = value;
+};
+
+var lux2Pitch = function(lux){ //ルクスの値をピッチに変換する
+ //var index = Math.floor(Math.max(100, Math.min(1100, lux)) / 100);
+ //return PITCH[index];
+ if(0<=lux && lux<30){
+   var wave = 1;
+   $rootScope.$apply(function(){
+       self.melodyLevel = wave;
+   })
+   return PITCH[0];
+ }else if(30<=lux && lux<60){
+   var wave = 1;
+   $rootScope.$apply(function(){
+       self.melodyLevel = wave;
+   })
+   return PITCH[1];
+ }else if(60<=lux && lux<90){
+   var wave = 1;
+   $rootScope.$apply(function(){
+       self.melodyLevel = wave;
+   })
+   return PITCH[2];
+ }else if(90<=lux && lux<120){
+   var wave = 2;
+   $rootScope.$apply(function(){
+       self.melodyLevel = wave;
+   })
+   return PITCH[3];
+ }else if(120<=lux && lux<150){
+   var wave = 2;
+   $rootScope.$apply(function(){
+       self.melodyLevel = wave;
+   })
+   return PITCH[4];
+ }else if(150<=lux && lux<180){
+   var wave = 2;
+   $rootScope.$apply(function(){
+       self.melodyLevel = wave;
+   })
+   return PITCH[5];
+ }else if(180<=lux && lux<210){
+   var wave = 3;
+   $rootScope.$apply(function(){
+       self.melodyLevel = wave;
+   })
+   return PITCH[6];
+ }else if(210<=lux && lux<240){
+   var wave = 3;
+   $rootScope.$apply(function(){
+       self.melodyLevel = wave;
+   })
+   return PITCH[7];
+ }else if(240<=lux && lux<270){
+   var wave = 3;
+   $rootScope.$apply(function(){
+       self.melodyLevel = wave;
+   })
+   return PITCH[8];
+ }else if(270<=lux && lux<300){
+   var wave = 4;
+   $rootScope.$apply(function(){
+       self.melodyLevel = wave;
+   })
+   return PITCH[9];
+ }else if(300<=lux && lux<330){
+   var wave = 4;
+   $rootScope.$apply(function(){
+       self.melodyLevel = wave;
+   })
+   return PITCH[10];
+ }else if(330<=lux && lux<360){
+   var wave = 4;
+   $rootScope.$apply(function(){
+       self.melodyLevel = wave;
+   })
+   return PITCH[11];
+ }
+};
+
+var handleDeviceLightEvent = function(event){
+ var lux = event.value; //lux値測定
+ if(indicator != null){
+   displayBrightness(indicator, lux); //表示
+ }
+ changePitch(lux2Pitch(lux)); //ピッチに変換
+};
+
+var initApp = function(){
+ indicator = document.querySelector("h1");
+
+ audioContext = new AudioContext();
+ oscillator = audioContext.createOscillator(); //音声系の処理を行うコンテキスト
+ oscillator.type = "triangle"; //"sine"; //"sawtooth"; 音色
+ oscillator.frequency.value = DEFAULT_PITCH; //音程
+ oscillator.connect(audioContext.destination);
+ oscillator.start();
+};
+
+$window.addEventListener("load", initApp);
+$window.addEventListener("devicelight", handleDeviceLightEvent);
+
+}])
