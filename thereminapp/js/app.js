@@ -34,4 +34,6 @@ app.controller("MainCtr",["$scope",function($scope){
 
         }
     });
+app.controller("MainCtr",[function(){
+
 }]);
