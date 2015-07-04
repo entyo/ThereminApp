@@ -12,9 +12,12 @@ app.controller("MainCtr",["$scope","melody",function($scope,melody){
         $scope.isLowShow = false;
         $scope.isLowerShow = false;
     }
-    $scope.level = melody.melodyLevel;
-    $scope.$watch("level",function(newVal,oldVal){
+    console.log(melody);
+    $scope.level = melody;
+    console.log($scope.level);
+    $scope.$watch("level.melodyLevel",function(newVal,oldVal){
         allFalse();
+        console.log("かわったよー");
         console.log(newVal);
         var _newVal = +newVal;
         switch (_newVal) {
@@ -36,9 +39,9 @@ app.controller("MainCtr",["$scope","melody",function($scope,melody){
         }
     })
 }]);
-app.service("melody",["$rootScope","$window",function($rootScope,$window){
+app.service("melody",["$rootScope","$window","$timeout",function($rootScope,$window,$timeout){
     var self =this;
-    this.melodyLevel = '';
+    self.melodyLevel ='';
     const PITCH = [
  220 * Math.pow( 1.06, 3 ), // ド
  220 * Math.pow( 1.06, 4 ), // ド#
@@ -72,77 +75,103 @@ var lux2Pitch = function(lux){ //ルクスの値をピッチに変換する
  //return PITCH[index];
  if(0<=lux && lux<30){
    var wave = 1;
-   $rootScope.$apply(function(){
+   $timeout(function(){
+       console.log("変化");
        self.melodyLevel = wave;
-   })
+        console.log(self.melodyLevel);
+   },100);
    return PITCH[0];
  }else if(30<=lux && lux<60){
    var wave = 1;
-   $rootScope.$apply(function(){
+   $timeout(function(){
+       console.log("変化");
        self.melodyLevel = wave;
-   })
+        console.log(self.melodyLevel);
+   },100);
    return PITCH[1];
  }else if(60<=lux && lux<90){
    var wave = 1;
-   $rootScope.$apply(function(){
+   $timeout(function(){
+       console.log("変化");
        self.melodyLevel = wave;
-   })
+        console.log(self.melodyLevel);
+   },100);
    return PITCH[2];
  }else if(90<=lux && lux<120){
    var wave = 2;
-   $rootScope.$apply(function(){
+   $timeout(function(){
+       console.log("変化");
        self.melodyLevel = wave;
-   })
+        console.log(self.melodyLevel);
+   },100);
    return PITCH[3];
  }else if(120<=lux && lux<150){
    var wave = 2;
-   $rootScope.$apply(function(){
+   $timeout(function(){
+       console.log("変化");
        self.melodyLevel = wave;
-   })
+        console.log(self.melodyLevel);
+   },100);
    return PITCH[4];
  }else if(150<=lux && lux<180){
    var wave = 2;
-   $rootScope.$apply(function(){
+   $timeout(function(){
+       console.log("変化");
        self.melodyLevel = wave;
-   })
+        console.log(self.melodyLevel);
+   },100);
    return PITCH[5];
  }else if(180<=lux && lux<210){
    var wave = 3;
-   $rootScope.$apply(function(){
+   $timeout(function(){
+       console.log("変化");
        self.melodyLevel = wave;
-   })
+        console.log(self.melodyLevel);
+   },100);
    return PITCH[6];
  }else if(210<=lux && lux<240){
    var wave = 3;
-   $rootScope.$apply(function(){
+   $timeout(function(){
+       console.log("変化");
        self.melodyLevel = wave;
-   })
+        console.log(self.melodyLevel);
+   },100);
    return PITCH[7];
  }else if(240<=lux && lux<270){
    var wave = 3;
-   $rootScope.$apply(function(){
+   $timeout(function(){
+       console.log("変化");
        self.melodyLevel = wave;
-   })
+        console.log(self.melodyLevel);
+   },100);
    return PITCH[8];
  }else if(270<=lux && lux<300){
    var wave = 4;
-   $rootScope.$apply(function(){
+   $timeout(function(){
+       console.log("変化");
        self.melodyLevel = wave;
-   })
+        console.log(self.melodyLevel);
+   },100);
    return PITCH[9];
  }else if(300<=lux && lux<330){
    var wave = 4;
-   $rootScope.$apply(function(){
+   $timeout(function(){
+       console.log("変化");
        self.melodyLevel = wave;
-   })
+        console.log(self.melodyLevel);
+   },100);
    return PITCH[10];
  }else if(330<=lux && lux<360){
    var wave = 4;
-   $rootScope.$apply(function(){
+   $timeout(function(){
+       console.log("変化");
        self.melodyLevel = wave;
-   })
+        console.log(self.melodyLevel);
+   },100);
    return PITCH[11];
  }
+
+
 };
 
 var handleDeviceLightEvent = function(event){
